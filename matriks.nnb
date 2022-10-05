@@ -1,0 +1,189 @@
+{
+    "cells": [
+        {
+            "language": "javascript",
+            "source": [
+                "class Matrix {\r\n    rows = 0;\r\n    cols = 0;\r\n    data = [];\r\n\t\r\n\tconstructor(rows, cols) {\r\n\t\tthis.rows = rows;\r\n\t\tthis.cols = cols;\r\n\t\tthis.data = Array.from(new Array(this.rows), () => new Array(this.cols));\r\n\t\treturn this;\r\n\t}\r\n\r\n\tsetColumn(index, data) {\r\n\t\tif (index >= this.cols || index < 0) {\r\n\t\t\tconsole.log(\"cannot set column at unexisting index\");\r\n\t\t\treturn;\r\n\t\t} else if (data.length !== this.rows) {\r\n\t\t\tconsole.log(\"cannot set column of length other than matrix column length\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tthis.map((e, i, j) => {\r\n\t\t\t\tif (j === index) {\r\n\t\t\t\t\treturn data[i];\r\n\t\t\t\t} else {\r\n\t\t\t\t\treturn e;\r\n\t\t\t\t}\r\n\t\t\t})\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tgetColumn(index) {\r\n\t\tlet result = [];\r\n\t\tif (index >= this.cols || index < 0) {\r\n\t\t\tconsole.log(\"cannot set column at unexisting index\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tfor (let i = 0; i < this.rows; i++) {\r\n\t\t\t\tfor (let j = 0; j < this.cols; j++) {\r\n\t\t\t\t\tif (j === index) {\r\n\t\t\t\t\t\tresult.push(this.data[i][j]);\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn result;\r\n\t}\r\n\r\n\taddColumn(data) {\r\n\t\tif(data.length !== this.rows) {\r\n\t\t\tconsole.log(\"cannot add invalid column\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tfor (let i = 0; i < this.rows; i++) {\r\n\t\t\t\tthis.data[i].push(data[i]);\r\n\t\t\t}\r\n\t\t\tthis.cols++;\r\n\t\t\treturn this;\r\n\t\t}\r\n\t}\r\n\r\n\tsetRow(index, data) {\r\n\t\tif (index >= this.rows || index < 0) {\r\n\t\t\tconsole.log(\"cannot set row at unexisting index\");\r\n\t\t\treturn;\r\n\t\t} else if (data.length !== this.cols) {\r\n\t\t\tconsole.log(\"cannot set row of length other than matrix row length\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tthis.map((e, i, j) => {\r\n\t\t\t\tif (i === index) {\r\n\t\t\t\t\treturn data[j];\r\n\t\t\t\t} else {\r\n\t\t\t\t\treturn e;\r\n\t\t\t\t}\r\n\t\t\t})\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tgetRow(index) {\r\n\t\tlet result = [];\r\n\t\tif (index >= this.rows || index < 0) {\r\n\t\t\tconsole.log(\"cannot set row at unexisting index\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tfor (let i = 0; i < this.rows; i++) {\r\n\t\t\t\tfor (let j = 0; j < this.cols; j++) {\r\n\t\t\t\t\tif (i === index) {\r\n\t\t\t\t\t\tresult.push(this.data[i][j]);\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn result;\r\n\t}\r\n\r\n\taddRow(data) {\r\n\t\tif(data.length !== this.cols) {\r\n\t\t\tconsole.log(\"cannot add invalid row\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tthis.data.push(data);\r\n\t\t\tthis.rows++;\r\n\t\t\treturn this;\r\n\t\t}\r\n\t}\r\n\r\n\tsetData(data){\r\n\t\tthis.data = data;\r\n\t\treturn this;\r\n\t}\r\n\r\n\tadd(value) {\r\n\t\tif (value instanceof Matrix) {\r\n\t\t\tif (value.rows !== this.rows || value.cols !== this.cols) {\r\n\t\t\t\tconsole.log(\"invalid matrix\");\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\t\t\tthis.map((e, i, j) => e + value.data[i][j]);\r\n\t\t} else if (!isNaN(value)) {\r\n\t\t\tthis.map(e => e + value);\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tstatic add(matrix, value) {\r\n\t\tif (value instanceof Matrix && matrix instanceof Matrix) {\r\n\t\t\tif (value.rows !== matrix.rows || value.cols !== matrix.cols) {\r\n\t\t\t\tconsole.log(\"invalid matrixes\")\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\t\t\treturn new Matrix(matrix.rows, matrix.cols)\r\n\t\t\t\t.map((e, i, j) => matrix.data[i][j] + value.data[i][j]);\r\n\t\t} else if (!isNaN(value)) {\r\n\t\t\treturn new Matrix(matrix.rows, matrix.cols)\r\n\t\t\t\t.map(e => matrix.data[i][j] + value);\r\n\t\t}\r\n\t}\r\n\r\n\tsubtract(value) {\r\n\t\tif (value instanceof Matrix) {\r\n\t\t\tif (value.rows !== this.rows || value.cols !== this.cols) {\r\n\t\t\t\tconsole.log(\"invalid matrix\");\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\t\t\tthis.map((e, i, j) => e - value.data[i][j]);\r\n\t\t} else if (!isNaN(value)) {\r\n\t\t\tthis.map(e => e - value);\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tstatic subtract(matrix, value) {\r\n\t\tif (value instanceof Matrix && matrix instanceof Matrix) {\r\n\t\t\tif (value.rows !== matrix.rows || value.cols !== matrix.cols) {\r\n\t\t\t\tconsole.log(\"invalid matrixes\")\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\t\t\treturn new Matrix(matrix.rows, matrix.cols)\r\n\t\t\t\t.map((e, i, j) => matrix.data[i][j] - value.data[i][j]);\r\n\t\t} else if (!isNaN(value)) {\r\n\t\t\treturn new Matrix(matrix.rows, matrix.cols)\r\n\t\t\t\t.map(e => matrix.data[i][j] - value);\r\n\t\t}\r\n\t}\r\n\r\n\tmultiply(value) {\r\n\t\tif (value instanceof Matrix) {\r\n\t\t\tif (value.rows !== this.rows || value.cols !== this.cols) {\r\n\t\t\t\tconsole.log(\"invalid matrix\");\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\t\t\tthis.map((e, i, j) => e * value.data[i][j]);\r\n\t\t} else if (!isNaN(value)) {\r\n\t\t\tthis.map(e => e * value);\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tstatic multiply(a, b) {\r\n\t\tif (a instanceof Matrix && b instanceof Matrix) {\r\n\t\t\tif (a.cols !== b.rows) {\r\n\t\t\t\tconsole.log(\"invalid matrixes\");\r\n\t\t\t\treturn;\r\n\t\t\t}\r\n\t\t\treturn new Matrix(a.rows, b.cols)\r\n\t\t\t\t.map((e, i, j) => {\r\n\t\t\t\t\tlet result = 0;\r\n\t\t\t\t\tfor (let k = 0; k < a.cols; k++) {\r\n\t\t\t\t\t\tresult += a.data[i][k] * b.data[k][j];\r\n\t\t\t\t\t}\r\n\t\t\t\t\treturn result;\r\n\t\t\t\t});\r\n\t\t}\r\n\t}\r\n\r\n\tmap(func) {\r\n\t\tfor (let i = 0; i < this.rows; i++) {\r\n\t\t\tfor (let j = 0; j < this.cols; j++) {\r\n\t\t\t\tlet value = this.data[i][j];\r\n\t\t\t\tthis.data[i][j] = func(value, i, j);\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tstatic map(matrix, func) {\r\n\t\tif (matrix instanceof Matrix) {\r\n\t\t\treturn new Matrix(matrix.rows, matrix.cols)\r\n\t\t\t\t.map((e, i, j) => func(matrix.data[i][j]));\r\n\t\t}\r\n\t}\r\n\r\n\tstatic getDeterminantOf(matrix) {\r\n\t\tif (matrix.rows !== matrix.cols) {\r\n\t\t\tconsole.log(\"cannot get determinant of a non square matrix\");\r\n\t\t\treturn;\r\n\t\t}\r\n\t\tif (matrix.rows === 2 && matrix.cols === 2) {\r\n\t\t\treturn matrix.getDeterminant2x2();\r\n\t\t} else {\r\n\t\t\tlet determinant = 0;\r\n\t\t\tfor (let i = 0; i < matrix.cols; i++) {\r\n\t\t\t\tif (i % 2 === 0) {\r\n\t\t\t\t\tdeterminant += matrix.data[0][i] * Matrix.getDeterminantOf(matrix.ignoreRowColumn(0, i));\r\n\t\t\t\t} else {\r\n\t\t\t\t\tdeterminant -= matrix.data[0][i] * Matrix.getDeterminantOf(matrix.ignoreRowColumn(0, i));\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\treturn determinant;\r\n\t\t}\r\n\t}\r\n\r\n\tgetDeterminantCofactorExpansion() {\r\n\t\tif(this.rows !== this.cols) {\r\n\t\t\tconsole.log(\"cannot find determinant of a non square matrix\");\r\n\t\t\treturn;\r\n\t\t}\r\n\t\tif(this.rows === 2 && this.cols === 2) {\r\n\t\t\treturn this.getDeterminant2x2();\r\n\t\t} else {\r\n\t\t\tlet determinant = 0;\r\n\t\t\tfor(let i = 0; i < this.cols; i++) {\r\n\t\t\t\tif(i % 2 === 0) {\r\n\t\t\t\t\tdeterminant += this.data[0][i] * this.ignoreRowColumn(0, i).getDeterminantCofactorExpansion();\r\n\t\t\t\t} else {\r\n\t\t\t\t\tdeterminant -= this.data[0][i] * this.ignoreRowColumn(0, i).getDeterminantCofactorExpansion();\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\treturn determinant;\r\n\t\t}\r\n\t}\r\n\r\n\tgetDeterminantRowReduction() {\r\n\t\tif(this.rows !== this.cols) {\r\n\t\t\tconsole.log(\"cannot find determinant of a non square matrix\");\r\n\t\t\treturn;\r\n\t\t}\r\n\t\tlet triangle = this.clone().topTriangle();\r\n\t\tlet determinant = 1;\r\n\t\tfor(let i = 0; i < triangle.rows; i++) {\r\n\t\t\tdeterminant *= triangle.data[i][i];\r\n\t\t}\r\n\t\treturn determinant;\r\n\t}\r\n\r\n\tgetDeterminant2x2() {\r\n\t\tif (this.rows !== this.cols) {\r\n\t\t\tconsole.log(\"cannot find determinant of a non square matrix\");\r\n\t\t\treturn;\r\n\t\t} else if (this.rows !== 2) {\r\n\t\t\tconsole.log(\"cannot calculate determinant of a matrix with dimensions other than 2x2 with this function.\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\treturn this.data[0][0] * this.data[1][1] - this.data[0][1] * this.data[1][0];\r\n\t\t}\r\n\t}\r\n\r\n\tignoreColumn(index) {\r\n\t\tif (index >= this.cols || index < 0) {\r\n\t\t\tconsole.log(\"cannot remove column at unexisting index\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tlet result = new Matrix(this.cols - 1, this.rows);\r\n\t\t\tresult.data = [];\r\n\t\t\tfor (let i = 0; i < this.cols; i++) {\r\n\t\t\t\tif (i !== index) {\r\n\t\t\t\t\tresult.data.push(this.getColumn(i));\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\treturn Matrix.transpose(result);\r\n\t\t}\r\n\t}\r\n\r\n\tignoreRow(index) {\r\n\t\tif (index >= this.rows || index < 0) {\r\n\t\t\tconsole.log(\"cannot remove row at unexisting index\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tlet result = new Matrix(this.rows - 1, this.cols);\r\n\t\t\tresult.data = [];\r\n\t\t\tfor (let i = 0; i < this.rows; i++) {\r\n\t\t\t\tif (i !== index) {\r\n\t\t\t\t\tresult.data.push(this.getRow(i));\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\treturn result;\r\n\t\t}\r\n\t}\r\n\r\n\tignoreRowColumn(rowIndex, colIndex) {\r\n\t\treturn this.ignoreRow(rowIndex).ignoreColumn(colIndex);\r\n\t}\r\n\r\n\tgetCofactor() {\r\n\t\tlet result = new Matrix(this.rows, this.cols);\r\n\t\tfor (let i = 0; i < this.rows; i++) {\r\n\t\t\tfor (let j = 0; j < this.cols; j++) {\r\n\t\t\t\tif ((i + j) % 2 === 0) {\r\n\t\t\t\t\tresult.data[i][j] = Matrix.getDeterminantOf(this.ignoreRowColumn(i, j));\r\n\t\t\t\t} else {\r\n\t\t\t\t\tresult.data[i][j] = -Matrix.getDeterminantOf(this.ignoreRowColumn(i, j));\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn result;\r\n\t}\r\n\r\n\tgetAdjoin() {\r\n\t\treturn Matrix.transpose(this.getCofactor());\r\n\t}\r\n\r\n\tinvertGaussJordan() {\r\n\t\tif (this.rows !== this.cols) {\r\n\t\t\tconsole.log(\"cannot invert a non square matrix\");\r\n\t\t\treturn;\r\n\t\t} else if(this.getDeterminantCofactorExpansion() === 0) {\r\n\t\t\tconsole.log(\"cannot invert a matrix with determinant 0\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tlet result = Matrix.identity(this.rows);\r\n\t\t\tfor (let i = 0; i < this.cols; i++) {\r\n\t\t\t\tif (this.data[i][i] === 0) {\r\n\t\t\t\t\tfor (let j = 0; j < this.rows; j++) {\r\n\t\t\t\t\t\tif (j === i) continue;\r\n\t\t\t\t\t\telse if (this.data[j][i] !== 0) {\r\n\t\t\t\t\t\t\tthis.swapRows(j, i);\r\n\t\t\t\t\t\t\tresult.swapRows(j, i);\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t\t// 2(a)\r\n\t\t\t\tlet multNum = 1 / this.data[i][i];\r\n\t\t\t\tthis.multiplyRowByConst(i, multNum);\r\n\t\t\t\tresult.multiplyRowByConst(i, multNum);\r\n\t\t\t\tfor (let j = 0; j < this.rows; j++) {\r\n\t\t\t\t\tif(j !== i) {\r\n\t\t\t\t\t\tlet numToMakeNull = this.data[j][i];\r\n\t\t\t\t\t\tthis.addMultipleOfRow(j, i, -numToMakeNull);\r\n\t\t\t\t\t\tthis.data[j][i] = 0;\r\n\t\t\t\t\t\tresult.addMultipleOfRow(j, i, -numToMakeNull);\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\tthis.data = result.data;\r\n\t\t\treturn this;\r\n\t\t}\r\n\t}\r\n\r\n\tinvertAdj() {\r\n\t\tlet determinant = this.getDeterminantCofactorExpansion();\r\n\t\tif (this.rows !== this.cols) {\r\n\t\t\tconsole.log(\"cannot invert a non square matrix\");\r\n\t\t\treturn;\r\n\t\t} else if(determinant === 0) {\r\n\t\t\tconsole.log(\"cannot invert a matrix with determinant 0\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tlet multiplier = 1 / determinant;\r\n\t\t\tthis.data = this.getAdjoin().multiply(multiplier).data;\r\n\t\t\treturn this;\r\n\t\t}\r\n\t}\r\n\r\n\t// row elementary operations\r\n\tswapRows(r1, r2) {\r\n\t\tif (r1 >= this.rows || r2 >= this.rows || r1 < 0 || r2 < 0) {\r\n\t\t\tconsole.log(\"cannot swap unexisting rows, index out of range\")\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tlet row1 = this.getRow(r1);\r\n\t\t\tlet row2 = this.getRow(r2);\r\n\r\n\t\t\tthis.setRow(r1, row2);\r\n\t\t\tthis.setRow(r2, row1);\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tmultiplyRowByConst(r, constant) {\r\n\t\tif (r < 0 || r >= this.rows) {\r\n\t\t\tconsole.log(\"cannot multiply unexisting row by \" + constant + \", index out of range\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tthis.map((e, i, j) => {\r\n\t\t\t\tif (i === r) {\r\n\t\t\t\t\treturn e * constant;\r\n\t\t\t\t} else {\r\n\t\t\t\t\treturn e;\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\taddMultipleOfRow(r1, r2, constant) {\r\n\t\tif (r1 >= this.rows || r2 >= this.rows || r1 < 0 || r2 < 0) {\r\n\t\t\tconsole.log(\"cannot cannot apply operation on unexisting rows, index out of range\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tlet row = this.getRow(r2);\r\n\t\t\tthis.map((e, i, j) => {\r\n\t\t\t\tif (i === r1) {\r\n\t\t\t\t\treturn e + row[j] * constant;\r\n\t\t\t\t} else {\r\n\t\t\t\t\treturn e;\r\n\t\t\t\t}\r\n\t\t\t});\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\trandomize(min, max, integerOnly = true) {\r\n\t\tif(integerOnly){\r\n\t\t\tthis.map(e => Math.floor(Math.random() * (max - min + 1)) + min);\r\n\t\t}else{\r\n\t\t\tthis.map(e => Math.random() * (max - min + 1) + min);\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tprint() {\r\n\t\tconsole.table(this.clone().map(e => +e.toFixed(2) || 0).data);\r\n\t}\r\n\r\n\ttranspose() {\r\n\t\tthis.data = new Matrix(this.cols, this.rows).map((e, i, j) => this.data[j][i]).data;\r\n\t\treturn this;\r\n\t}\r\n\r\n\tstatic transpose(matrix) {\r\n\t\tif (matrix instanceof Matrix) {\r\n\t\t\treturn new Matrix(matrix.cols, matrix.rows).map((e, i, j) => matrix.data[j][i]);\r\n\t\t}\r\n\t}\r\n\r\n\tstatic identity(dimentions) {\r\n\t\tlet result = new Matrix(dimentions, dimentions);\r\n\t\tresult.map((e, i, j) => {\r\n\t\t\tif (i === j) {\r\n\t\t\t\treturn 1;\r\n\t\t\t} else {\r\n\t\t\t\treturn 0;\r\n\t\t\t}\r\n\t\t});\r\n\t\treturn result;\r\n\t}\r\n\r\n\ttopTriangle() {\r\n\t\tlet found = false;\r\n\t\tfor (let n =  0; n < this.rows; n++) {\r\n\t\t\tif(this.data[n][n] === 0){\r\n\t\t\t\tfound = false;\r\n\t\t\t\tlet i = n+1;\r\n\t\t\t\twhile(!found && i < this.rows){\r\n\t\t\t\t\tif(this.data[i][n] != 0){\r\n\t\t\t\t\t\tfound = true;\r\n\t\t\t\t\t\tthis.addMultipleOfRow(n, i, 1);\r\n\t\t\t\t\t}\r\n\t\t\t\t\ti++;\r\n\t\t\t\t}\r\n\t\t\t\tif(!found){\r\n\t\t\t\t\tconsole.log(\"no solution\");\r\n\t\t\t\t\treturn;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\tfor (let i = n+1; i < this.rows; i++) {\r\n\t\t\t\tif(this.data[i][n] != 0){\r\n\t\t\t\t\tthis.addMultipleOfRow(i, n, -this.data[i][n]/this.data[n][n]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tbottomTriangle() {\r\n\t\tlet found = false;\r\n\t\tfor (let n = this.rows-1; n >= 0; n--) {\r\n\t\t\tif(this.data[n][n] === 0){\r\n\t\t\t\tfound = false;\r\n\t\t\t\tlet i = n-1;\r\n\t\t\t\twhile(!found && i >= 0){\r\n\t\t\t\t\tif(this.data[i][n] != 0){\r\n\t\t\t\t\t\tfound = true;\r\n\t\t\t\t\t\tthis.addMultipleOfRow(n, i, 1);\r\n\t\t\t\t\t}\r\n\t\t\t\t\ti--;\r\n\t\t\t\t}\r\n\t\t\t\tif(!found){\r\n\t\t\t\t\tconsole.log(\"no solution\");\r\n\t\t\t\t\treturn;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\tfor (let i = n-1; i >= 0; i--) {\r\n\t\t\t\tif(this.data[i][n] != 0){\r\n\t\t\t\t\tthis.addMultipleOfRow(i, n, -this.data[i][n]/this.data[n][n]);\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn this;\r\n\t}\r\n\r\n\tsolveLinearSystemGaussJordan() {\r\n\t\tif (this.rows !== this.cols-1) {\r\n\t\t\tconsole.log(\"matrix is not a linear system, must be N x N+1\");\r\n\t\t\treturn;\r\n\t\t} else {\r\n\t\t\tfor (let i = 0; i < this.cols-1; i++) {\r\n\t\t\t\tif (this.data[i][i] === 0) {\r\n\t\t\t\t\tfor (let j = 0; j < this.rows; j++) {\r\n\t\t\t\t\t\tif (j === i) continue;\r\n\t\t\t\t\t\telse if (this.data[j][i] !== 0) {\r\n\t\t\t\t\t\t\tthis.swapRows(j, i);\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t\t// 2(a)\r\n\t\t\t\tlet multNum = 1 / this.data[i][i];\r\n\t\t\t\tthis.multiplyRowByConst(i, multNum);\r\n\t\t\t\tfor (let j = 0; j < this.rows; j++) {\r\n\t\t\t\t\tif (j === i) continue;\r\n\t\t\t\t\telse {\r\n\t\t\t\t\t\tlet numToMakeNull = this.data[j][i];\r\n\t\t\t\t\t\tthis.addMultipleOfRow(j, i, -numToMakeNull);\r\n\t\t\t\t\t\tthis.data[j][i] = 0;\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t\treturn this;\r\n\t\t}\r\n\t}\r\n\r\n\tclone() {\r\n\t\treturn new Matrix(this.rows, this.cols)\r\n\t\t\t.map((e, i, j) => this.data[i][j]);\r\n\t}\r\n}"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "//invers metode gauss jordan\r\nvar testMatrix = new Matrix(4,4);\r\ntestMatrix.setData([\r\n    [1,3,1,1],\r\n    [2,5,2,2],\r\n    [1,3,8,9],\r\n    [1,3,2,2]\r\n])\r\ntestMatrix.invertGaussJordan().print();"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "┌─────────┬────┬────┬────┬────┐",
+                                "│ (index) │ 0  │ 1  │ 2  │ 3  │",
+                                "├─────────┼────┼────┼────┼────┤",
+                                "│    0    │ -4 │ 3  │ 0  │ -1 │",
+                                "│    1    │ 2  │ -1 │ 0  │ 0  │",
+                                "│    2    │ -7 │ 0  │ -1 │ 8  │",
+                                "│    3    │ 6  │ 0  │ 1  │ -7 │",
+                                "└─────────┴────┴────┴────┴────┘",
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "//invers metode 1/det(A) * adj(A)\r\nvar testMatrix = new Matrix(4,4);\r\ntestMatrix.setData([\r\n    [1,3,1,1],\r\n    [2,5,2,2],\r\n    [1,3,8,9],\r\n    [1,3,2,2]\r\n])\r\ntestMatrix.invertAdj().print();"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "┌─────────┬────┬────┬────┬────┐",
+                                "│ (index) │ 0  │ 1  │ 2  │ 3  │",
+                                "├─────────┼────┼────┼────┼────┤",
+                                "│    0    │ -4 │ 3  │ 0  │ -1 │",
+                                "│    1    │ 2  │ -1 │ 0  │ 0  │",
+                                "│    2    │ -7 │ 0  │ -1 │ 8  │",
+                                "│    3    │ 6  │ 0  │ 1  │ -7 │",
+                                "└─────────┴────┴────┴────┴────┘",
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "//determinan metode ekspansi kofaktor\r\nvar testMatrix = new Matrix(4,4);\r\ntestMatrix.setData([\r\n    [1,3,1,1],\r\n    [2,5,2,2],\r\n    [1,3,8,9],\r\n    [1,3,2,2]\r\n])\r\nconsole.log(testMatrix.getDeterminantCofactorExpansion())"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/plain",
+                            "value": [
+                                "\u001b[33m1\u001b[39m"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "//determinan metode reduksi baris\r\nvar testMatrix = new Matrix(4,4);\r\ntestMatrix.setData([\r\n    [1,3,1,1],\r\n    [2,5,2,2],\r\n    [1,3,8,9],\r\n    [1,3,2,2]\r\n])\r\nconsole.log(testMatrix.getDeterminantRowReduction())"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "items": [
+                        {
+                            "mime": "text/plain",
+                            "value": [
+                                "\u001b[33m0.9999999999999996\u001b[39m"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "//segitiga atas\r\ntestMatrix.setData([\r\n    [1,3,1,1],\r\n    [2,5,2,2],\r\n    [1,3,8,9],\r\n    [1,3,2,2]\r\n])\r\ntestMatrix.topTriangle().print()"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "┌─────────┬───┬────┬───┬───────┐",
+                                "│ (index) │ 0 │ 1  │ 2 │   3   │",
+                                "├─────────┼───┼────┼───┼───────┤",
+                                "│    0    │ 1 │ 3  │ 1 │   1   │",
+                                "│    1    │ 0 │ -1 │ 0 │   0   │",
+                                "│    2    │ 0 │ 0  │ 7 │   8   │",
+                                "│    3    │ 0 │ 0  │ 0 │ -0.14 │",
+                                "└─────────┴───┴────┴───┴───────┘",
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "//segitiga bawah\r\ntestMatrix.setData([\r\n    [1,3,1,1],\r\n    [2,5,2,2],\r\n    [1,3,8,9],\r\n    [1,3,2,2]\r\n])\r\ntestMatrix.bottomTriangle().print()"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "┌─────────┬───────┬───────┬────┬───┐",
+                                "│ (index) │   0   │   1   │ 2  │ 3 │",
+                                "├─────────┼───────┼───────┼────┼───┤",
+                                "│    0    │ -0.25 │   0   │ 0  │ 0 │",
+                                "│    1    │   1   │   2   │ 0  │ 0 │",
+                                "│    2    │ -3.5  │ -10.5 │ -1 │ 0 │",
+                                "│    3    │   1   │   3   │ 2  │ 2 │",
+                                "└─────────┴───────┴───────┴────┴───┘",
+                                "",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
